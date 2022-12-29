@@ -24,7 +24,7 @@ public class DataHelper {
 
     @Value
     public static class VerificationCode {
-        private String code;
+        String code;
     }
 
     public static AuthInfo getAuthInfoWithTestData() {

@@ -30,33 +30,29 @@ public class TestForVerification {
         var loginPage = open("http://localhost:9999", LoginPage.class);
         var authInfo = DataHelper.getAuthInfoWithTestData();
         var verificationPage = loginPage.validLogin(authInfo);
-        verificationPage.validVerify(SQLHelper.getVerificationCode());
-        var dashBoard = new DashboardPage();
+        verificationPage.verifyVerificationPageVisibility();
+        var verificationCode = SQLHelper.getVerificationCode();
+        verificationPage.validVerify(verificationCode.getCode());
     }
 
     @Test
     void shouldShowAnErrorIfLoginOrPasswordIsIncorrect() {
         var loginPage = open("http://localhost:9999", LoginPage.class);
         var authInfo = DataHelper.generateRandomUser();
-        $("[data-test-id=\"login\"] input").setValue(authInfo.getLogin());
-        $("[data-test-id=\"password\"] input").setValue(authInfo.getPassword());
-        $("[data-test-id=\"action-login\"]").click();
-        $("[data-test-id=\"error-notification\"]")
-                .shouldBe(Condition.visible, Duration.ofSeconds(15));
+        loginPage.validLogin(authInfo);
+        loginPage.errorNotification();
     }
 
     @Test
     void shouldShowAnErrorIfVerificationCodeIsIncorrect() {
         var loginPage = open("http://localhost:9999", LoginPage.class);
         var authInfo = DataHelper.getAuthInfoWithTestData();
-        $("[data-test-id=\"login\"] input").setValue(authInfo.getLogin());
-        $("[data-test-id=\"password\"] input").setValue(authInfo.getPassword());
-        $("[data-test-id=\"action-login\"]").click();
-        var code = DataHelper.generateRandomVerificationCode();
-        $("[data-test-id=\"code\"] input").setValue(code.getCode());
-        $("[data-test-id=\"action-verify\"]").click();
-        $("[data-test-id=\"error-notification\"]")
-                .shouldBe(Condition.visible, Duration.ofSeconds(15));
+        var verificationPage = loginPage.validLogin(authInfo);
+        verificationPage.verifyVerificationPageVisibility();
+        var verificationCode = DataHelper.generateRandomVerificationCode();
+        verificationPage.verify(verificationCode.getCode());
+        verificationPage.errorNotification();
+
     }
 
 }
