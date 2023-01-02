@@ -17,7 +17,7 @@ public class VerificationPage {
     private SelenideElement verifyButton = $("[data-test-id=\"action-verify\"]");
 
     public void errorNotification() {
-        error.shouldHave(Condition.text("Ошибка! Неверно указан логин или пароль"))
+        error.shouldHave(Condition.text("Ошибка! Неверно указан код! Попробуйте еще раз."))
                 .shouldBe(Condition.visible, Duration.ofSeconds(15));
     }
 
